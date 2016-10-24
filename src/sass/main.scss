@@ -1,0 +1,18 @@
+#site-header{
+    color:white;
+}
+.mdl-textfield.is-focused input{
+    border-bottom:none;
+}
+
+.mdl-textfield.is-focused .mdl-textfield__label:after{
+    bottom:14px;
+}
+
+.text-area-tt{
+    position: absolute;
+    right:0;
+    top:40%;
+    font-size:16px;
+    
+}

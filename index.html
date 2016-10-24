@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Html To SCSS</title>
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+		crossorigin="anonymous">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.orange-pink.min.css" />
+</head>
+
+<body>
+
+	<script type="text/x-template" id="array-string-input-template">
+  <input type="text" v-model="internalOption">
+</script>
+	<div id="vue-app">
+		<!-- Always shows a header, even in smaller screens. -->
+		<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+			<header id="site-header" class="mdl-layout__header">
+				<div class="mdl-layout__header-row">
+					<!-- Title -->
+					<span class="mdl-layout-title">Sassify HTML</span>
+					<!-- Add spacer, to align navigation to the right -->
+					<div class="mdl-layout-spacer"></div>
+					<!-- Navigation. We hide it in small screens. -->
+					<nav class="mdl-navigation mdl-layout--large-screen-only">
+						<a class="mdl-navigation__link" href="">About</a>
+						<a class="mdl-navigation__link" href="">Contact</a>
+					</nav>
+				</div>
+			</header>
+			<div class="mdl-layout__drawer">
+				<span class="mdl-layout-title">Title</span>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="">About</a>
+					<a class="mdl-navigation__link" href="">Contact</a>
+				</nav>
+			</div>
+			<main class="mdl-layout__content">
+				<div class="mdl-grid">
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="mdl-card__supporting-text">
+							<div class="mdl-grid">
+								<div class="mdl-cell mdl-cell--12-col">
+									<h2>Options</h2>
+									<!--<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Save</button>-->
+								</div>
+								<div class="mdl-cell mdl-cell--3-col">
+									<h3>Tags</h3>
+
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="option__hide-tags">
+                                            <input type="checkbox" id="option__hide-tags" class="mdl-checkbox__input" v-model="options.hideTagsAll">
+                                            <span class="mdl-checkbox__label">Hide Tags</span>
+											<span id="option__hide-tags__tt" class=" mdl-checkbox__label icon material-icons">help</span>
+                                    </label>
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__always-hide-tags" v-model="options.hideTagsInclude" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__always-hide-tags">Always hide</label>
+										<div id="options__always-hide-tags__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__never-hide-tags" v-model="options.hideTagsExclude" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__never-hide-tags">Never hide</label>
+										<div id="options__never-hide-tags__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+								</div>
+
+								<div class="mdl-cell mdl-cell--3-col">
+									<h3>IDs</h3>
+
+
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="option__hide-ids">
+                                            <input type="checkbox" id="option__hide-ids" class="mdl-checkbox__input" v-model="options.hideIdsAll">
+                                            <span class="mdl-checkbox__label">Hide IDs</span>
+											<span id="option__hide-ids__tt" class=" mdl-checkbox__label icon material-icons">help</span>
+                                    </label>
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__always-hide-ids" v-model="options.hideIdsInclude" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__always-hide-ids">Always hide</label>
+										<div id="options__always-hide-ids__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__never-hide-ids" v-model="options.hideIdsExclude" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__never-hide-ids">Never hide</label>
+										<div id="options__never-hide-ids__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__remove-by-ids" v-model="options.removeElementsById" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__remove-by-ids">Remove by ID</label>
+										<div id="options__remove-by-ids__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__extract-by-ids" v-model="options.extractElementsById" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__extract-by-ids">Extract by ID</label>
+										<div id="options__extract-by-ids__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+								</div>
+								<div class="mdl-cell mdl-cell--3-col">
+									<h3>Classes</h3>
+
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="option__hide-classes">
+                                            <input type="checkbox" id="option__hide-classes" class="mdl-checkbox__input" v-model="options.hideClassesAll">
+                                            <span class="mdl-checkbox__label">Hide classes</span>
+											<span id="option__hide-classes__tt" class=" mdl-checkbox__label icon material-icons">help</span>
+                                    </label>
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__always-hide-classes" v-model="options.hideClassesInclude" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__always-hide-classes">Always hide</label>
+										<div id="options__always-hide-classes__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__never-hide-classes" v-model="options.hideClassesExclude" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__never-hide-classes">Never hide</label>
+										<div id="options__never-hide-classes__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__remove-by-classes" v-model="options.removeElementsByClass" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__remove-by-classes">Remove by class</label>
+										<div id="options__remove-by-classes__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+
+									<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+										<array-string-input id="options__extract-by-classes" v-model="options.extractElementsByClass" class="mdl-textfield__input"></array-string-input>
+										<label class="mdl-textfield__label" for="options__extract-by-classes">Extract by class</label>
+										<div id="options__extract-by-classes__tt" class="icon material-icons text-area-tt">help</div>
+									</div>
+
+								</div>
+								<div class="mdl-cell mdl-cell--3-col">
+									<h3>Other</h3>
+
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="option__reduce-siblings">
+                                            <input type="checkbox" id="option__reduce-siblings" class="mdl-checkbox__input" v-model="options.reduceSiblings">
+                                            <span class="mdl-checkbox__label">Reduce Siblings</span>
+											<span id="option__reduce-siblings__tt" class=" mdl-checkbox__label icon material-icons">help</span>
+                                    </label>
+
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="option__combine-parents">
+                                            <input type="checkbox" id="option__combine-parents" class="mdl-checkbox__input" v-model="options.combineParents">
+                                            <span class="mdl-checkbox__label">Combine Parents</span>
+											<span id="option__combine-parents__tt" class=" mdl-checkbox__label icon material-icons">help</span>
+                                    </label>
+									<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="option__convert-bem">
+                                            <input type="checkbox" id="option__convert-bem" class="mdl-checkbox__input" v-model="options.convertBEM">
+                                            <span class="mdl-checkbox__label">Convert BEM</span>
+											<span id="option__convert-bem__tt" class=" mdl-checkbox__label icon material-icons">help</span>
+                                    </label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="mdl-card mdl-shadow--2dp" style="width:100%;">
+							<div class="mdl-card__supporting-text">
+								<div class="mdl-grid">
+									<div class="mdl-cell mdl-cell--12-col">
+										<button @click="convert" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+  Convert
+</button>
+									</div>
+									<div class="mdl-cell mdl-cell--6-col">
+										<!--<button class="mdl-button mdl-js-button mdl-js-ripple-effect">Beautify</button>-->
+										<ace-editor :code="htmlData" @onchange="htmlUpdated"></ace-editor>
+									</div>
+									<div class="mdl-cell mdl-cell--6-col">
+										<!--<button class="mdl-button mdl-js-button mdl-js-ripple-effect">Beautify</button>-->
+										<ace-editor :code="scss" :mode="'scss'"></ace-editor>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="option__hide-tags__tt">
+		Hide tags: Hide all tags from SCSS output.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__always-hide-tags__tt">
+		Always hide: Space separated tag list that will always be hidden from output.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__never-hide-tags__tt">
+		Never hide: Space separated tag list that will never be hidden from output.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="option__hide-ids__tt">
+		Hide IDs: Hide all IDs from SCSS output.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__always-hide-ids__tt">
+		Always hide: Space separated ID list that will always be hidden from output.<br> Do not include #.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__never-hide-ids__tt">
+		Never hide: Space separated ID list that will never be hidden from output.<br> Do not include #.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__remove-by-ids__tt">
+		Remove by Ids: Space separated ID list of which the selector and it's children will be removed from the SCSS heirarchy.<br>		Do not include #.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__extract-by-ids__tt">
+		Extract by Ids: Space separated ID list of which the selector and it's children will be extracted from their position in
+		the SCSS heirarchy, and moved to the top level of the heirarchy. This is useful for componenets.<br> Do not include #.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="option__hide-classes__tt">
+		Hide classes: Hide all classes from SCSS output.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__always-hide-classes__tt">
+		Always hide: Space separated class list that will always be hidden from output.<br> Do not include '.'
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__never-hide-classes__tt">
+		Never hide: Space separated class list that will never be hidden from output.<br> Do not include '.'
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__remove-by-classes__tt">
+		Remove by class: Space separated class list of which the selector and it's children will be removed from the SCSS heirarchy.<br>		Do not include '.'
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="options__extract-by-classes__tt">
+		Extract by class: Space separated class list of which the selector and it's children will be extracted from their position
+		in the SCSS heirarchy, and moved to the top level of the heirarchy. This is useful for componenets.<br> Do not include
+		'.'
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="option__reduce-siblings__tt">
+		Reduce Siblings: Identical sibling elements with identical children will only be output as a single selector. Most useful
+		for repeating elements like list items.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="option__combine-parents__tt">
+		Combine parents: A bottom up merger of similar parent elements. If two sibling selectors have parents with the same selector,
+		then those parents will be merged.
+	</div>
+	<div class="mdl-tooltip" data-mdl-for="option__convert-bem__tt">
+		Convert BEM:  Recognizes and converts double _ BEM heirarchy to &__.<br>
+		Does not currently identify --modifiers
+	</div>
+	<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+	<script src="/lib/ace.js"></script>
+	<script src="/lib/jquery-3.1.1.min.js"></script>
+	<script src="/lib/vuejs2.0.1.js"></script>
+	<script src="/bundle.js"></script>
+</body>
+
+</html>
