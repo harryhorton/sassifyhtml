@@ -54,6 +54,7 @@ Version 1.0.0
 
 ### Roadmap:
 
+* Implement code formatting
 * Include BEM modifiers in BEM conversion
 * Partially restructure the conversion class for ease of extendabilty
 * Add local browser storage to save and retrieve settings
