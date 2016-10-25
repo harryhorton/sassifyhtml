@@ -1,7 +1,7 @@
 # sassifyhtml
 Converts HTML to SCSS
 
-[https://johnhhorton.github.io/sassifyhtml/](https://johnhhorton.github.io/sassifyhtml/m)
+[https://johnhhorton.github.io/sassifyhtml/](https://johnhhorton.github.io/sassifyhtml)
 
 ## Purpose
 I found myself writing a lot of html, and then having to replicate much
