@@ -169,6 +169,13 @@
 	  },
 	  methods: {
 	    convert: function convert() {
+	      ga('send', {
+	        hitType: 'event',
+	        eventCategory: 'interaction',
+	        eventAction: 'click',
+	        eventLabel: 'convert'
+	      });
+	
 	      var html = this.htmlData;
 	      var extractedHtml = htmlToScss.extractHtml(html);
 	
@@ -735,7 +742,7 @@
 	
 	
 	// module
-	exports.push([module.id, "#site-header {\n  color: white; }\n\n.mdl-textfield.is-focused input {\n  border-bottom: none; }\n\n.mdl-textfield.is-focused .mdl-textfield__label:after {\n  bottom: 14px; }\n\n.text-area-tt {\n  position: absolute;\n  right: 0;\n  top: 40%;\n  font-size: 16px; }\n", ""]);
+	exports.push([module.id, ".mdl-textfield.is-focused input {\n  border-bottom: none; }\n\n.mdl-textfield.is-focused .mdl-textfield__label:after {\n  bottom: 14px; }\n\n.text-area-tt {\n  position: absolute;\n  right: 0;\n  top: 40%;\n  font-size: 16px; }\n", ""]);
 	
 	// exports
 

@@ -117,6 +117,13 @@ const VueApp = new Vue({
   },
   methods: {
     convert() {
+      ga('send', {
+  hitType: 'event',
+  eventCategory: 'interaction',
+  eventAction: 'click',
+  eventLabel: 'convert'
+});
+
       let html = this.htmlData
       let extractedHtml = htmlToScss.extractHtml(html);
 
