@@ -1,7 +1,7 @@
 {
   "name": "htmltoscss",
   "version": "1.0.0",
-  "description": "Convert htmlt to scss",
+  "description": "Convert htmlt to scss https://johnhhorton.github.io/sassifyhtml/",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
