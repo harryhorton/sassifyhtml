@@ -83,42 +83,38 @@ export default class HtmlToScss {
 
     newDom.forEach(el => {
       el.classes.forEach(theClass => {
-        if (hideList.indexOf(theClass) !== -1) {
-          el.tag = ''
-          el.ids = []
-          el.classes = []
-        }
+        let isInHideList = (hideList.indexOf(theClass) !== -1)
+        if (isInHideList) el = this.emptyElementValues(el)
       })
       el.children = this.hideElementsByClass(el.children, hideList)
     })
+
     return newDom
   }
 
   hideElementsById(dom, hideList = []) {
     let newDom = this.deepCopy(dom)
+
     newDom.forEach(el => {
       el.ids.forEach(id => {
-        if (hideList.indexOf(id) !== -1) {
-          el.tag = ''
-          el.ids = []
-          el.classes = []
-        }
+        let isInHideList = (hideList.indexOf(id) !== -1)
+        if (isInHideList) el = this.emptyElementValues(el)
       })
       el.children = this.hideElementsById(el.children, hideList)
     })
+
     return newDom
   }
 
   removeElementsByClass(dom, removeList = []) {
     let newDom = this.deepCopy(dom)
-    let remove = false
+
     newDom = newDom.filter((el) => {
-      let keep = true
-      el.classes.forEach(theClass => {
-        if (removeList.indexOf(theClass) !== -1) {
-          keep = false
-        }
+      let keep = el.classes.every((theClass) => {
+        let isNotInRemoveList = !(removeList.indexOf(theClass) !== -1)
+        return isNotInRemoveList
       })
+
       return keep
     })
     newDom.forEach((el, index) => {
@@ -132,14 +128,15 @@ export default class HtmlToScss {
     let newDom = this.deepCopy(dom)
     let remove = false
     newDom = newDom.filter((el) => {
-      let keep = true
-      el.ids.forEach(id => {
-        if (removeList.indexOf(id) !== -1) {
-          keep = false
-        }
+
+      let keep = el.ids.every((id) => {
+        let isNotInRemoveList = !(removeList.indexOf(id) !== -1)
+        return isNotInRemoveList
       })
+
       return keep
     })
+
     newDom.forEach((el, index) => {
       el.children = this.removeElementsById(el.children, removeList)
 
@@ -166,6 +163,7 @@ export default class HtmlToScss {
     }
 
     extracted = extracted.concat(extract(newDom, extractList))
+
     newDom = this.removeElementsByClass(newDom, extractList)
     newDom = newDom.concat(extracted)
     newDom.forEach((el, index) => {
@@ -175,6 +173,19 @@ export default class HtmlToScss {
     })
     return newDom
   }
+  // addButtonStates(){
+
+  // }
+  // addClassStates(){
+
+  // }
+
+  // compressDepth(){
+
+  // }
+
+
+  
   extractById(dom, extractList = []) {
     let newDom = this.deepCopy(dom)
     let domLength = newDom.length - 1
