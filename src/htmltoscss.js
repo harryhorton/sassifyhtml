@@ -26,7 +26,7 @@
 
 export default class HtmlToScss {
   constructor(optionsInput) {
-    let options = this.deepCopy(optionsInput)
+    let options = this.deepCopy(optionsInput || {})
     this.options = {
       hideTagsInclude: this.setDefault(options.hideTagsInclude, ['div']),
       hideTagsExclude: this.setDefault(options.hideTagsExclude, []),
@@ -52,8 +52,7 @@ export default class HtmlToScss {
   }
 
   convert(dom) {
-    let html = this.deepCopy(dom)
-    let extractedHtml = this.extractHtml(html)
+    let extractedHtml = this.deepCopy(this.extractHtml(dom))
     let tagsHidden = this.hideTags(extractedHtml, this.options.hideTagsInclude, this.options.hideTagsExclude, this.options.hideTagsAll)
     let idsHidden = this.hideIds(tagsHidden, this.options.hideIdsInclude, this.options.hideIdsExclude, this.options.hideIdsAll)
     let hiddenByClass = this.hideElementsByClass(idsHidden, this.options.hideElementsByClass)
@@ -399,6 +398,7 @@ export default class HtmlToScss {
   }
 
   deepCopy(obj) {
+    if (typeof obj === 'undefined') obj = {}
     return JSON.parse(JSON.stringify(obj))
   }
 

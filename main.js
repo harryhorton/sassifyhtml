@@ -62,10 +62,10 @@ Vue.component('ace-editor', {
       this.$emit('onchange', this.editor.getValue())
     }
   },
-  watch:{
-    code(val){
-      if(val !== this.internalCode) this.editor.setValue(val)
-      
+  watch: {
+    code(val) {
+      if (val !== this.internalCode) this.editor.setValue(val)
+
     }
   }
 })
@@ -117,41 +117,20 @@ const VueApp = new Vue({
   },
   methods: {
     convert() {
-      ga('send', {
-  hitType: 'event',
-  eventCategory: 'interaction',
-  eventAction: 'click',
-  eventLabel: 'convert'
-});
+      if (typeof ga !== 'undefined') {
+        
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'interaction',
+          eventAction: 'click',
+          eventLabel: 'convert'
+        });
+      }
 
       let html = this.htmlData
-      let extractedHtml = htmlToScss.extractHtml(html);
+      htmlToScss.changeOptions(this.options)
 
-      let tagsHidden = htmlToScss.hideTags(extractedHtml, this.options.hideTagsInclude, this.options.hideTagsExclude, this.options.hideTagsAll)
-
-      let idsHidden = htmlToScss.hideIds(tagsHidden, this.options.hideIdsInclude, this.options.hideIdsExclude, this.options.hideIdsAll)
-
-      let hiddenByClass = htmlToScss.hideElementsByClass(idsHidden, this.options.hideElementsByClass)
-
-      let classesHidden = htmlToScss.hideClasses(hiddenByClass, this.options.hideClassesInclude, this.options.hideClassesExclude, this.options.hideClassesAll)
-
-      let hiddenById = htmlToScss.hideElementsById(classesHidden, this.options.hideElementsById)
-
-      let removedByClass = htmlToScss.removeElementsByClass(hiddenById, this.options.removeElementsByClass)
-
-      let removedById = htmlToScss.removeElementsById(removedByClass, this.options.removeElementsById)
-
-      let extracted = htmlToScss.extractByClass(removedById, this.options.extractElementsByClass)
-
-      let extractedById = htmlToScss.extractById(extracted, this.options.extractElementsById)
-
-      let reduced = (this.options.reduceSiblings) ? htmlToScss.reduceSiblings(extractedById) : extractedById
-
-      let combinedParents = (this.options.combineParents) ? htmlToScss.combineSimilarParents(reduced) : reduced
-
-      let BEMConverted = (this.options.convertBEM) ? htmlToScss.convertBEM(combinedParents) : combinedParents
-      let scss = htmlToScss.convertToScss(BEMConverted);
-      this.scss = scss
+      this.scss = htmlToScss.convert(html)
     },
 
     htmlUpdated(newHtml) {
