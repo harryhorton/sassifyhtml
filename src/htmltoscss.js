@@ -25,11 +25,59 @@
 //remove classes
 
 export default class HtmlToScss {
-  constructor() {
+  constructor(optionsInput) {
+    let options = this.deepCopy(optionsInput)
+    this.options = {
+      hideTagsInclude: this.setDefault(options.hideTagsInclude, ['div']),
+      hideTagsExclude: this.setDefault(options.hideTagsExclude, []),
+      hideTagsAll: this.setDefault(options.hideTagsAll, false),
+      hideIdsInclude: this.setDefault(options.hideIdsInclude, []),
+      hideIdsExclude: this.setDefault(options.hideIdsExclude, []),
+      hideIdsAll: this.setDefault(options.hideIdsAll, false),
+      hideClassesInclude: this.setDefault(options.hideClassesInclude, []),
+      hideClassesExclude: this.setDefault(options.hideClassesExclude, []),
+      hideClassesAll: this.setDefault(options.hideClassesAll, false),
+      hideElementsById: this.setDefault(options.hideElementsById, []),
+      hideElementsByClass: this.setDefault(options.hideElementsByClass, []),
+      removeElementsById: this.setDefault(options.removeElementsById, []),
+      removeElementsByClass: this.setDefault(options.removeElementsByClass, []),
+      extractElementsById: this.setDefault(options.extractElementsById, []),
+      extractElementsByClass: this.setDefault(options.extractElementsByClass, []),
+      reduceSiblings: this.setDefault(options.reduceSiblings, true),
+      combineParents: this.setDefault(options.combineParents, true),
+      convertBEM: this.setDefault(options.convertBEM, true),
+    }
     this.newDom = null
     this.output = null
   }
 
+  convert(dom) {
+    let html = this.deepCopy(dom)
+    let extractedHtml = this.extractHtml(html)
+    let tagsHidden = this.hideTags(extractedHtml, this.options.hideTagsInclude, this.options.hideTagsExclude, this.options.hideTagsAll)
+    let idsHidden = this.hideIds(tagsHidden, this.options.hideIdsInclude, this.options.hideIdsExclude, this.options.hideIdsAll)
+    let hiddenByClass = this.hideElementsByClass(idsHidden, this.options.hideElementsByClass)
+    let classesHidden = this.hideClasses(hiddenByClass, this.options.hideClassesInclude, this.options.hideClassesExclude, this.options.hideClassesAll)
+    let hiddenById = this.hideElementsById(classesHidden, this.options.hideElementsById)
+    let removedByClass = this.removeElementsByClass(hiddenById, this.options.removeElementsByClass)
+    let removedById = this.removeElementsById(removedByClass, this.options.removeElementsById)
+    let extracted = this.extractByClass(removedById, this.options.extractElementsByClass)
+    let extractedById = this.extractById(extracted, this.options.extractElementsById)
+    let reduced = (this.options.reduceSiblings) ? this.reduceSiblings(extractedById) : extractedById
+    let combinedParents = (this.options.combineParents) ? this.combineSimilarParents(reduced) : reduced
+    let BEMConverted = (this.options.convertBEM) ? this.convertBEM(combinedParents) : combinedParents
+    let scss = this.convertToScss(BEMConverted)
+
+    return scss
+  }
+
+  changeOptions(newOptionsInput) {
+    let newOptions = this.deepCopy(newOptionsInput)
+    let optionKeys = Object.keys(newOptions)
+    optionKeys.forEach(optionKey => {
+      this.options[optionKey] = newOptions[optionKey]
+    })
+  }
   hideTags(dom, include = [], exclude = [], hideAll = false) {
     let newDom = this.deepCopy(dom)
 
@@ -159,7 +207,7 @@ export default class HtmlToScss {
         })
         extracted = extracted.concat(extract(el.children, extractList))
       })
-      return extracted;
+      return extracted
     }
 
     extracted = extracted.concat(extract(newDom, extractList))
@@ -185,7 +233,7 @@ export default class HtmlToScss {
   // }
 
 
-  
+
   extractById(dom, extractList = []) {
     let newDom = this.deepCopy(dom)
     let domLength = newDom.length - 1
@@ -201,7 +249,7 @@ export default class HtmlToScss {
         })
         extracted = extracted.concat(extract(el.children, extractList))
       })
-      return extracted;
+      return extracted
     }
 
     extracted = extracted.concat(extract(newDom, extractList))
@@ -221,7 +269,7 @@ export default class HtmlToScss {
     if (newDom.length > 1) {
       newDom = newDom.filter((el, index, arr) => {
         let filter = true
-        for (var i = index; i < arr.length; i++) {
+        for (var i = index i < arr.length i++) {
           if (i + 1 !== arr.length && this.compareElements(el, arr[i + 1])) {
             filter = false
           }
@@ -241,7 +289,7 @@ export default class HtmlToScss {
     if (newDom.length > 1) {
       newDom = newDom.filter((el, index, arr) => {
         let filter = true
-        for (var i = index; i < arr.length; i++) {
+        for (var i = index i < arr.length i++) {
           if (i + 1 !== arr.length && this.compareElementsWithoutChildren(el, arr[i + 1])) {
             arr[i + 1].children = arr[i + 1].children.concat(el.children)
             filter = false
@@ -315,7 +363,7 @@ export default class HtmlToScss {
   compareElements(el1, el2) {
 
     if (JSON.stringify(el1) === JSON.stringify(el2)) {
-      return true;
+      return true
     } else {
       return false
     }
@@ -326,7 +374,7 @@ export default class HtmlToScss {
     let idsMatch = (JSON.stringify(el1.ids) === JSON.stringify(el2.ids))
     let classesMatch = (JSON.stringify(el1.classes) === JSON.stringify(el2.classes))
     if (tagsMatch && idsMatch && classesMatch) {
-      return true;
+      return true
     } else {
       return false
     }
@@ -342,16 +390,20 @@ export default class HtmlToScss {
   }
 
   toArray(obj) {
-    var array = [];
+    var array = []
     // iterate backwards ensuring that length is an UInt32
-    for (var i = obj.length >>> 0; i--;) {
-      array[i] = obj[i];
+    for (var i = obj.length >>> 0 i--) {
+      array[i] = obj[i]
     }
-    return array;
+    return array
   }
 
   deepCopy(obj) {
     return JSON.parse(JSON.stringify(obj))
+  }
+
+  setDefault(source, defaultVal) {
+    return (typeof source !== 'undefined') ? source : defaultVal
   }
 
   extractHtml(inputHtml) {
@@ -368,7 +420,7 @@ export default class HtmlToScss {
           children: this.extractHtml(el.children)
         })
       }
-    });
+    })
     return nodes
   }
 
