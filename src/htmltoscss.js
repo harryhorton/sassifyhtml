@@ -269,7 +269,7 @@ export default class HtmlToScss {
     if (newDom.length > 1) {
       newDom = newDom.filter((el, index, arr) => {
         let filter = true
-        for (var i = index i < arr.length i++) {
+        for (var i = index; i < arr.length; i++) {
           if (i + 1 !== arr.length && this.compareElements(el, arr[i + 1])) {
             filter = false
           }
@@ -289,7 +289,7 @@ export default class HtmlToScss {
     if (newDom.length > 1) {
       newDom = newDom.filter((el, index, arr) => {
         let filter = true
-        for (var i = index i < arr.length i++) {
+        for (var i = index; i < arr.length; i++) {
           if (i + 1 !== arr.length && this.compareElementsWithoutChildren(el, arr[i + 1])) {
             arr[i + 1].children = arr[i + 1].children.concat(el.children)
             filter = false
@@ -390,12 +390,12 @@ export default class HtmlToScss {
   }
 
   toArray(obj) {
-    var array = []
+    var array = [];
     // iterate backwards ensuring that length is an UInt32
-    for (var i = obj.length >>> 0 i--) {
-      array[i] = obj[i]
+    for (var i = obj.length >>> 0; i--;) {
+      array[i] = obj[i];
     }
-    return array
+    return array;
   }
 
   deepCopy(obj) {
