@@ -65,7 +65,8 @@ export default class HtmlToScss {
     let reduced = (this.options.reduceSiblings) ? this.reduceSiblings(extractedById) : extractedById
     let combinedParents = (this.options.combineParents) ? this.combineSimilarParents(reduced) : reduced
     let BEMConverted = (this.options.convertBEM) ? this.convertBEM(combinedParents) : combinedParents
-    let scss = this.convertToScss(BEMConverted)
+    let buttonStates = this.addButtonStates(BEMConverted)
+    let scss = this.convertToScss(buttonStates)
 
     return scss
   }
@@ -196,9 +197,9 @@ export default class HtmlToScss {
     let domLength = newDom.length - 1
     let extracted = []
 
-    function extract(dom, extractList) {
+    function extract(newDom, extractList) {
       let extracted = []
-      dom.forEach((el) => {
+      newDom.forEach((el) => {
         el.classes.forEach(theClass => {
           if (extractList.indexOf(theClass) !== -1) {
             extracted.push(el)
@@ -220,9 +221,36 @@ export default class HtmlToScss {
     })
     return newDom
   }
-  // addButtonStates(){
 
-  // }
+  addButtonStates(dom){
+    let newDom = this.deepCopy(dom)
+    console.log(newDom)
+    newDom.forEach(el =>{
+      if(el.tag === 'a' || el.tag === 'button'){
+        console.log('found button')
+        el.children = el.children.concat([{
+          tag: '',
+          ids: [],
+          classes:['&:hover'],
+          children:[]
+        },{
+          tag: '',
+          ids: [],
+          classes:['&:active'],
+          children:[]
+        },{
+          tag: '',
+          ids: [],
+          classes:['&:focus'],
+          children:[]
+        }])
+      }
+      console.log('children', el, newDom.Children)
+      el.children = this.addButtonStates(el.children)
+    })
+
+    return newDom
+  }
   // addClassStates(){
 
   // }
