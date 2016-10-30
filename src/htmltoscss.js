@@ -100,7 +100,7 @@ export default class HtmlToScss {
       el.ids = el.ids.filter(id => {
         let isInExcludeList = (exclude.indexOf(id) !== -1)
         let isInIncludeList = (include.indexOf(id) !== -1)
-        return !((hideAll && isInExcludeList) || (!hideAll && isInIncludeList))
+        return !((hideAll && !isInExcludeList) || (!hideAll && isInIncludeList))
       })
 
       el.children = this.hideIds(el.children, include, exclude, hideAll)
@@ -116,7 +116,7 @@ export default class HtmlToScss {
       el.classes = el.classes.filter(theClass => {
         let isInExcludeList = (exclude.indexOf(theClass) !== -1)
         let isInIncludeList = (include.indexOf(theClass) !== -1)
-        return !((hideAll && isInExcludeList) || (!hideAll && isInIncludeList))
+        return !((hideAll && !isInExcludeList) || (!hideAll && isInIncludeList))
       })
 
       el.children = this.hideClasses(el.children, include, exclude, hideAll)
