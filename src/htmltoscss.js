@@ -286,16 +286,25 @@ export default class HtmlToScss {
   combineSimilarParents(dom) {
     let newDom = this.deepCopy(dom)
     if (newDom.length > 1) {
-      newDom = newDom.filter((el, index, arr) => {
-        let filter = true
-        for (var i = index; i < arr.length; i++) {
-          if (i + 1 !== arr.length && this.compareElementsWithoutChildren(el, arr[i + 1])) {
-            arr[i + 1].children = arr[i + 1].children.concat(el.children)
-            filter = false
-          }
-        }
-        return filter
+      //make sure at least one has chilren.
+      let oneHasChildren = false
+      newDom.forEach(el => {
+        if (el.children.length > 0) oneHasChildren = true
       })
+      if (oneHasChildren) {
+        //combine similar parents
+        newDom = newDom.filter((el, index, arr) => {
+          let filter = true
+          for (var i = index; i < arr.length; i++) {
+            if (i + 1 !== arr.length && this.compareElementsWithoutChildren(el, arr[i + 1])) {
+              arr[i + 1].children = arr[i + 1].children.concat(el.children)
+              filter = false
+            }
+          }
+          return filter
+        })
+      }
+
     }
     newDom.forEach(el => {
       el.children = this.combineSimilarParents(el.children)
