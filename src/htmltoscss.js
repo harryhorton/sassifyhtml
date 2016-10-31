@@ -66,7 +66,8 @@ export default class HtmlToScss {
     let combinedParents = (this.options.combineParents) ? this.combineSimilarParents(reduced) : reduced
     let BEMConverted = (this.options.convertBEM) ? this.convertBEM(combinedParents) : combinedParents
     let buttonStates = this.addButtonStates(BEMConverted)
-    let scss = this.convertToScss(buttonStates)
+    let reducedTiers = this.reduceTiers(buttonStates, 4)
+    let scss = this.convertToScss(reducedTiers)
 
     return scss
   }
@@ -336,15 +337,33 @@ export default class HtmlToScss {
     })
 
     return newDom
-
   }
-
-  reduceTiers(dom) {
+  //TODO figure out why the 6th level deep doesn't get reduced
+  reduceTiers(dom, maxDepth = 4, currentDepth = 1) {
+    let depth = currentDepth
     let newDom = this.deepCopy(dom)
-    
+    let tierChildren = []
+    if (maxDepth <= currentDepth) {
+      console.log('running')
+      newDom.forEach(el => {
+        el.children = el.children.filter(child => {
+          if ((child.classes.length > 0 && child.classes[0].indexOf('&') !== 0) || child.classes.length === 0) {
+            tierChildren.push(child)
+            return false
+          }
+          return true
+        })
+      })
+      //tierChildren = this.reduceTiers(tierChildren, maxDepth, currentDepth + 1)
+      newDom = newDom.concat(tierChildren)
+    }
+    console.log(currentDepth)
+    newDom.forEach(el => {
+      el.children = this.reduceTiers(el.children, maxDepth, currentDepth + 1)
+    })
+
 
     return newDom
-
   }
 
   convertBEM(dom, parentClasses = null, bemParentCallback) {
