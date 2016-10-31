@@ -222,30 +222,27 @@ export default class HtmlToScss {
     return newDom
   }
 
-  addButtonStates(dom){
+  addButtonStates(dom) {
     let newDom = this.deepCopy(dom)
-    console.log(newDom)
-    newDom.forEach(el =>{
-      if(el.tag === 'a' || el.tag === 'button'){
-        console.log('found button')
+    newDom.forEach(el => {
+      if (el.tag === 'a' || el.tag === 'button') {
         el.children = el.children.concat([{
           tag: '',
           ids: [],
-          classes:['&:hover'],
-          children:[]
-        },{
+          classes: ['&:hover'],
+          children: []
+        }, {
           tag: '',
           ids: [],
-          classes:['&:active'],
-          children:[]
-        },{
+          classes: ['&:active'],
+          children: []
+        }, {
           tag: '',
           ids: [],
-          classes:['&:focus'],
-          children:[]
+          classes: ['&:focus'],
+          children: []
         }])
       }
-      console.log('children', el, newDom.Children)
       el.children = this.addButtonStates(el.children)
     })
 
@@ -342,14 +339,82 @@ export default class HtmlToScss {
 
   }
 
-  convertBEM(dom, parentString) {
-
+  reduceTiers(dom) {
     let newDom = this.deepCopy(dom)
-
-    newDom = newDom.map((el) => this.convertBEMRecursive(el))
+    
 
     return newDom
+
   }
+
+  convertBEM(dom, parentClasses = null, bemParentCallback) {
+    let newDom = this.deepCopy(dom)
+
+    newDom.forEach(el => {
+      let newChildren = []
+      let isBEMParent = false
+      let BEMParentClass = ''
+      if (el.children.length > 0)
+        el.children = this.convertBEM(el.children, el.classes, (bemParentClass) => {
+          isBEMParent = true
+          BEMParentClass = bemParentClass
+        })
+
+      //if class modifier, create &--modifer child.
+      el.classes = el.classes.filter(theClass => {
+        let isKeptClass = true
+        el.classes.forEach(compareClass => {
+          //if it's not the same, and theclass is modifer
+          if (theClass !== compareClass && theClass.indexOf(compareClass + '--') !== -1) {
+            let modiferClass = theClass.replace(compareClass, '&')
+            newChildren.push({
+              tag: '',
+              ids: [],
+              classes: [modiferClass],
+              children: []
+            })
+            isKeptClass = false
+          }
+        })
+        return isKeptClass
+      })
+      el.children = newChildren.concat(el.children)
+
+
+      if (parentClasses !== null) {
+        //if class bemchild, modify, push others to newChildren
+        parentClasses.forEach(parentClass => {
+          el.classes = el.classes.map(childClass => {
+            //check if class is block child of parent
+            if (childClass.indexOf(parentClass + '__') !== -1) {
+              bemParentCallback(parentClass)
+              return childClass.replace(parentClass + '__', '&__')
+            }
+            return childClass
+          })
+
+        })
+
+        //If bemchild class found, remove any other classes
+        let isBEMChild = false
+        el.classes.forEach(theClass => {
+          if (theClass.indexOf('&__') !== -1) isBEMChild = true
+        })
+        //remove everything but bem rule if child.
+        if (isBEMChild)
+          el.classes = el.classes.filter(theClass => {
+            return (theClass.indexOf('&__') !== -1)
+          })
+      }
+
+      //
+      if (isBEMParent && BEMParentClass.indexOf('__') === -1)
+        el.classes = [BEMParentClass]
+
+    })
+    return newDom
+  }
+
 
   convertBEMRecursive(parent) {
 
