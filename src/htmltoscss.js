@@ -346,12 +346,18 @@ export default class HtmlToScss {
     if (maxDepth <= currentDepth) {
       console.log('running')
       newDom.forEach(el => {
+        console.log('foreach')
+        console.log(el)
         el.children = el.children.filter(child => {
-          if ((child.classes.length > 0 && child.classes[0].indexOf('&') !== 0) || child.classes.length === 0) {
+          console.log('filter callback')
+          if (child.classes.length > 0 && child.classes[0].indexOf('&') === 0) {
+            console.log('returned true')
+            return true
+          } else {
+            console.log('returned false')
             tierChildren.push(child)
             return false
           }
-          return true
         })
       })
       //tierChildren = this.reduceTiers(tierChildren, maxDepth, currentDepth + 1)
